@@ -20,7 +20,7 @@
     }
     #map {
       width: 100%;
-      height: calc(100% - 200px); /* 게시판 공간 확보 */
+      height: calc(100% - 200px);
       background: #f0f0f0;
       position: relative;
     }
@@ -44,7 +44,6 @@
       border-radius: 4px;
       display: none;
     }
-    /* 컨트롤 컨테이너 */
     #controls {
       position: fixed;
       right: 10px;
@@ -88,7 +87,6 @@
     #settings-button {
       width: 120px;
     }
-    /* 정보 패널 */
     #all-info, #manufacturer-info, #complex-info {
       position: absolute;
       z-index: 10;
@@ -165,7 +163,6 @@
     #info-popup-content {
       margin-bottom: 10px;
     }
-    /* 게시판 스타일 */
     #bulletin-board {
       height: 200px;
       overflow-y: auto;
@@ -217,12 +214,10 @@
   </style>
 </head>
 <body>
-  <!-- 지도 영역 -->
   <div id="map"></div>
   <div id="loading">지도 로딩 중...</div>
   <div id="error-message"></div>
   
-  <!-- 컨트롤 컨테이너 -->
   <div id="controls">
     <button id="initial-reset" class="control-button">처음으로</button>
     <button id="reset-button" class="control-button">선택 초기화</button>
@@ -242,7 +237,6 @@
     </div>
   </div>
   
-  <!-- 정보 패널 -->
   <div id="all-info">
     <span id="info-all-capacity"></span><br>
     <span id="info-all-capacity-gw"></span><br>
@@ -264,13 +258,11 @@
     <span id="info-complex-completion"></span>
   </div>
   
-  <!-- 정보 팝업 -->
   <div id="info-popup">
     <button class="close-button" onclick="toggleInfoPopup()">×</button>
     <div id="info-popup-content"></div>
   </div>
   
-  <!-- 게시판 영역 -->
   <div id="bulletin-board">
     <div id="post-form">
       <input type="text" id="post-title" placeholder="뉴스 기사 제목" required>
@@ -502,7 +494,7 @@
       const lang = isEnglish ? 'en' : 'ko';
       document.getElementById('page-title').textContent = translations[lang].title;
       document.getElementById('loading').textContent = translations[lang].loading;
-      document.getElementById('map-type-toggle').textContent = is.negotiable ? translations[lang].mapTypeToggle : translations[lang].mapTypeToggleSatellite;
+      document.getElementById('map-type-toggle').textContent = isSatellite ? translations[lang].mapTypeToggle : translations[lang].mapTypeToggleSatellite;
       document.getElementById('name-toggle-button').textContent = areNamesVisible ? translations[lang].nameToggle : translations[lang].nameToggleOn;
       document.getElementById('marker-toggle-button').textContent = areMarkersVisible ? translations[lang].markerToggle : translations[lang].markerToggleOn;
       document.getElementById('translate-button').textContent = translations[lang].translate;
@@ -531,7 +523,7 @@
       updateInfoPanels();
       updateMarkers();
       document.getElementById('info-popup-content').innerHTML = translations[lang].infoPopup;
-      renderPosts(); // 게시물 언어 업데이트
+      renderPosts();
     }
 
     function showError(message) {
@@ -635,7 +627,7 @@
       await loadManufacturers();
       await loadCSVData();
       updateUILanguage();
-      renderPosts(); // 초기 게시물 렌더링
+      renderPosts();
       console.log("앱 초기화 완료");
     }
 
@@ -675,7 +667,8 @@
         infoButton.addEventListener('click', toggleInfoPopup);
         console.log("info-button 이벤트 리스너 등록 완료");
       } else {
-        console.error("   }
+        console.error("info-button 요소를 찾을 수 없습니다");
+      }
       document.getElementById('settings-button').addEventListener('click', () => {
         const settingsContainer = document.getElementById('settings-container');
         settingsContainer.style.display = settingsContainer.style.display === 'none' ? 'flex' : 'none';
@@ -814,7 +807,7 @@
         map.setCenter(new kakao.maps.LatLng(farm.lat, farm.lon));
         map.setLevel(6);
       } else {
-        const bounds = new kakao.maps.LatLngBounds();
+        bunkakao.maps.LatLngBounds();
         filteredFarms.forEach(farm => {
           if (farm.lat && farm.lon) {
             bounds.extend(new kakao.maps.LatLng(farm.lat, farm.lon));
@@ -940,7 +933,7 @@
     }
 
     function updateMarkers() {
-      clearMap();
+      clearMap();
       const zoomLevel = map.getLevel();
       console.log("현재 줌 레벨:", zoomLevel);
       const markerImage = new kakao.maps.MarkerImage(
@@ -1126,7 +1119,6 @@
       }
     };
 
-    // 게시판 관련 함수
     function submitPost() {
       const title = document.getElementById('post-title').value.trim();
       const link = document.getElementById('post-link').value.trim();
